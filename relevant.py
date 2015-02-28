@@ -84,16 +84,21 @@ sorted(v76.iteritems())
 ########################################
 ## Question 2
 
-# A simple, common measure of model quality is the std of the error (residuals)
-#  This can be normalized by the std or mean of the of the fitted values:
+# A simple, common measure of model quality is the mean and std of the error
+#  (where individual error values are computed as a fraction of the individual predicted value)
+err_pct = 100 * df.Fitted_residuals / df.Fitted_Values
+err_pct.mean()
+# -1.5897469803931876
+err_pct.std()
+# 71.725621302816833
+
+# Other statistics sometimes used
 df.Fitted_residuals.std() / df.Fitted_Values.std()
 # 2.4477465236730169
+#  It is often also normalized by 
 df.Fitted_residuals.std() / df.Fitted_Values.mean()
 # 0.64158435507137113
-#
-# For both normalizations the error is an excessively large portion of the predicted value
-# So the model is not very effective at predicting the predicted value
-#
+
 # Sometimes the correlation (normalized covariance) between the fitted value and the residuals can indicate an additional oportunity to produce a better fit
 # but this correlation matrix doesn't seem to indicate that, because the cross correlation value is low
 df[df.columns[:2]].corr()
@@ -101,7 +106,30 @@ df[df.columns[:2]].corr()
 # Fitted_residuals          1.000000      -0.000159
 # Fitted_Values            -0.000159       1.000000
 
-#df.cov()
+
+########################################
+## Question 3
+
+# The prediction error was -1.6% +/ 71.7% 1-sigma
+# Mean error of -1.6% is small, so the center of mass of the predicted value is near the true value
+# However 71.7% error std is large and indicates that individual predictions have large error
+
+
+########################################
+## Question 4
+
+# There are large correlations between V23, V34, and V76 (see df.corr() below):
+# V23 and V34: 76% 
+# V23 and V76: -33%
+# V76 and V34: -42%
+
+# So these 3 variables are likely linear related
+#
+# However V76 appears to be categorical rather than ordinal. 
+# Categorical variables can be decomposed into binary values to produce a more accurate model
+
+
+df.cov()
 #                   Fitted_residuals   Fitted_Values            V6  \
 # Fitted_residuals     324794.184847      -21.125900 -1.263300e+03   
 # Fitted_Values           -21.125900    54209.494818 -5.504700e+06   
@@ -109,7 +137,7 @@ df[df.columns[:2]].corr()
 # V23                      -0.161758       17.274371  1.038102e+05   
 # V34                      -0.276370      113.942164  1.678451e+05   
 # V76                      -0.062802      -15.385900 -1.208506e+04   
-
+#
 #                             V23            V34           V76  
 # Fitted_residuals      -0.161758      -0.276370     -0.062802  
 # Fitted_Values         17.274371     113.942164    -15.385900  
@@ -118,7 +146,7 @@ df[df.columns[:2]].corr()
 # V34                   31.868737      73.966059     -1.886641  
 # V76                   -0.799463      -1.886641      0.262847  
 
-# df.corr()
+df.corr()
 #                   Fitted_residuals  Fitted_Values        V6       V23  \
 # Fitted_residuals          1.000000      -0.000159 -0.000011 -0.000060   
 # Fitted_Values            -0.000159       1.000000 -0.115544  0.015785   
@@ -126,7 +154,7 @@ df[df.columns[:2]].corr()
 # V23                      -0.000060       0.015785  0.107935  1.000000   
 # V34                      -0.000056       0.056902  0.095377  0.788351   
 # V76                      -0.000215      -0.128894 -0.115199 -0.331755   
-
+#
 #                        V34       V76  
 # Fitted_residuals -0.000056 -0.000215  
 # Fitted_Values     0.056902 -0.128894  
