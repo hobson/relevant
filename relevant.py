@@ -130,6 +130,12 @@ df[df.columns[:2]].corr()
 # The correlation shows that only some of these decompsed categories have large correlation with the predicted value
 #  (values 2 and 3)
 # But V23 is highly corelated with them as well.
+#
+# V23 has low correlation with the Fitted Value, so it may be possible to drop it, 
+#  especially since it has high correlation with V76,
+#  So much of its prediction "information" is already contained there
+
+
 
 # Obviously this code should be looped:
 df['V76_1'] = (df['V76'] == 1).astype(int)
@@ -162,13 +168,6 @@ df.corr()
 # V76_3            -0.383721  0.891020 -0.071557 -0.965891  1.000000 -0.146378  
 # V76_4            -0.125638  0.305462 -0.006485 -0.087539 -0.146378  1.000000  
 
-
-
-
-# Question 4.2
-# V23 has low correlation with the Fitted Value, so it may be possible to drop it, 
-#  especially since it has high correlation with V76,
-#  So much of its prediction "information" is already contained there
 
 df.cov()
 #                   Fitted_residuals   Fitted_Values            V6  \
