@@ -86,12 +86,12 @@ print(sorted(v76.iteritems()))
 
 # A simple, common measure of model quality is the mean and std of the error
 #  (where individual error values are computed as a fraction of the individual predicted value)
-rmse = pd.np.mean(df.Fitted_residuals ** 2) **.5
+rmse = pd.np.mean(df.Fitted_residuals ** 2) ** 0.5
 print(rmse)
 # 569.77
 # 570 is a large portion of the predicted value, espically when compared on a per-measurement basis:
 # so this is a poor model/predictor
-rmse_pct = 100 * pd.np.mean((df.Fitted_residuals / df.Fitted_Values) ** 2) **.5 
+rmse_pct = 100 * pd.np.mean((df.Fitted_residuals / df.Fitted_Values) ** 2) ** 0.5 
 # this is idnetical to what my previous formula produced for the err_pct.std() 
 print(rmse_pct)
 # 71.7%
