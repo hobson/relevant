@@ -1,9 +1,9 @@
 """
 Attached to this email is a data set, ds_test_final.csv. The data set includes the following pieces of information:
-• Column 1: Observed dependent variable
-• Column 2: Fitted Residuals
-• Column 3: Fitted Values
-• The remainder of the columns: Predictors (not all predictor variables used in the model included in the model are included in the included data set).
+* Column 1: Observed dependent variable
+* Column 2: Fitted Residuals
+* Column 3: Fitted Values
+* The remainder of the columns: Predictors (not all predictor variables used in the model included in the model are included in the included data set).
 
 To the best of your ability with the data from the file, please carry out the following tasks in Python (using whatever packages and tools you feel are the most appropriate to fully answer the following questions:
 1. Load and summarize the included data.
@@ -39,7 +39,7 @@ df = pd.DataFrame.from_csv('ds_test_final.csv')
 #   Fitted Residuals: 0.0237 +/- 569.9 1-sigma
 #       The histogram shows significant assymetry, so the model features should be transformed
 
-df.describe()
+print(df.describe())
 #
 #        Fitted_residuals  Fitted_Values              V6          V23  \
 # count       2215.000000    2215.000000     2215.000000  2215.000000   
@@ -61,7 +61,7 @@ df.describe()
 # 75%      16.905000     3.000000  
 # max      58.000000     4.000000  
 
-df.isnull().sum()
+print(df.isnull().sum())
 # Fitted_residuals    0
 # Fitted_Values       0
 # V6                  0
@@ -77,7 +77,7 @@ plt.savefig('histograms.png')
 
 from collections import Counter
 v76 = Counter(df['V76'])
-sorted(v76.iteritems())
+print(sorted(v76.iteritems()))
 # [(1, 7), (2, 811), (3, 1368), (4, 29)]
 
 
@@ -86,11 +86,16 @@ sorted(v76.iteritems())
 
 # A simple, common measure of model quality is the mean and std of the error
 #  (where individual error values are computed as a fraction of the individual predicted value)
-err_pct = 100 * df.Fitted_residuals / df.Fitted_Values
-err_pct.mean()
-# -1.5897469803931876
-err_pct.std()
-# 71.725621302816833
+rmse = pd.np.mean(df.Fitted_residuals ** 2) **.5
+print(rmse)
+# 569.77
+# 570 is a large portion of the predicted value, espically when compared on a per-measurement basis:
+# so this is a poor model/predictor
+rmse_pct = 100 * pd.np.mean((df.Fitted_residuals / df.Fitted_Values) ** 2) **.5 
+# this is idnetical to what my previous formula produced for the err_pct.std() 
+print(rmse_pct)
+# 71.7%
+
 
 # Other statistics sometimes used
 df.Fitted_residuals.std() / df.Fitted_Values.std()
