@@ -126,8 +126,49 @@ df[df.columns[:2]].corr()
 # So these 3 variables are likely linear related
 #
 # However V76 appears to be categorical rather than ordinal. 
-# Categorical variables can be decomposed into binary values to produce a more accurate model
+# Categorical variables should be decomposed into binary values to produce a more accurate model
+# The correlation shows that only some of these decompsed categories have large correlation with the predicted value
+#  (values 2 and 3)
+# But V23 is highly corelated with them as well.
 
+# Obviously this code should be looped:
+df['V76_1'] = (df['V76'] == 1).astype(int)
+df['V76_2'] = (df['V76'] == 2).astype(int)
+df['V76_3'] = (df['V76'] == 3).astype(int)
+df['V76_4'] = (df['V76'] == 4).astype(int)
+
+df.corr()
+#                   Fitted_residuals  Fitted_Values        V6       V23  \
+# Fitted_residuals          1.000000      -0.000159 -0.000011 -0.000060   
+# Fitted_Values            -0.000159       1.000000 -0.115544  0.015785   
+# V6                       -0.000011      -0.115544  1.000000  0.107935   
+# V23                      -0.000060       0.015785  0.107935  1.000000   
+# V34                      -0.000056       0.056902  0.095377  0.788351   
+# V76                      -0.000215      -0.128894 -0.115199 -0.331755   
+# V76_1                     0.010452       0.006340  0.009852  0.074526   
+# V76_2                    -0.001546       0.132425  0.116105  0.307299   
+# V76_3                    -0.000329      -0.128796 -0.112102 -0.285165   
+# V76_4                     0.002799      -0.013724 -0.017666 -0.120008   
+
+#                        V34       V76     V76_1     V76_2     V76_3     V76_4  
+# Fitted_residuals -0.000056 -0.000215  0.010452 -0.001546 -0.000329  0.002799  
+# Fitted_Values     0.056902 -0.128894  0.006340  0.132425 -0.128796 -0.013724  
+# V6                0.095377 -0.115199  0.009852  0.116105 -0.112102 -0.017666  
+# V23               0.788351 -0.331755  0.074526  0.307299 -0.285165 -0.120008  
+# V34               1.000000 -0.427880  0.076219  0.407850 -0.383721 -0.125638  
+# V76              -0.427880  1.000000 -0.180222 -0.949909  0.891020  0.305462  
+# V76_1             0.076219 -0.180222  1.000000 -0.042793 -0.071557 -0.006485  
+# V76_2             0.407850 -0.949909 -0.042793  1.000000 -0.965891 -0.087539  
+# V76_3            -0.383721  0.891020 -0.071557 -0.965891  1.000000 -0.146378  
+# V76_4            -0.125638  0.305462 -0.006485 -0.087539 -0.146378  1.000000  
+
+
+
+
+# Question 4.2
+# V23 has low correlation with the Fitted Value, so it may be possible to drop it, 
+#  especially since it has high correlation with V76,
+#  So much of its prediction "information" is already contained there
 
 df.cov()
 #                   Fitted_residuals   Fitted_Values            V6  \
